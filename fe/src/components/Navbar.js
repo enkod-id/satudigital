@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const userRole = localStorage.getItem('userRole'); // Ambil informasi peran dari penyimpanan lokal
 
   const handleLogout = () => {
     // Remove the token from localStorage
@@ -30,8 +31,15 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Todo App
         </Typography>
+        {userRole === 'admin' && (
+          <Button color="inherit" onClick={() => handleNavigation('/admin')}>Admin Menu</Button>
+        )}
+        {userRole === 'admin' && (
         <Button color="inherit" onClick={() => handleNavigation('/todo')}>Todo List</Button>
-        <Button color="inherit" onClick={() => handleNavigation('/users')}>Users</Button>
+        )}
+        {userRole === 'admin' && (
+          <Button color="inherit" onClick={() => handleNavigation('/users')}>Users</Button>
+        )}
         <Button color="inherit" onClick={handleLogout}>Logout</Button>
       </Toolbar>
     </AppBar>

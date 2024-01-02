@@ -7,6 +7,8 @@ import ForgetPasswordForm from './components/ForgetPasswordForm';
 import TodoPage from './components/TodoPage';
 import UserTable from './components/UserTable';
 import AddTodo from './components/AddTodo';
+import AdminDashboard from './components/AdminDashboard'; // Import AdminDashboard
+import UserDashboard from './components/UserDashboard'; // Import UserDashboard
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -22,6 +24,8 @@ const App = () => {
             <Route path="/todo" element={<ProtectedRoute><TodoPage /></ProtectedRoute>} />
             <Route path="/users" element={<ProtectedRoute><UserTable /></ProtectedRoute>} />
             <Route path="/todo/edit/1" element={<ProtectedRoute><AddTodo /></ProtectedRoute>} />
+            <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/user-dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
           </Routes>
         </main>
       </div>

@@ -35,20 +35,33 @@ const LoginForm = () => {
         },
         body: JSON.stringify({ email, password })
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Login failed:', errorData);
         return;
       }
-  
+
       const data = await response.json();
       console.log('Login successful:', data);
 
       // Save the token to localStorage
       localStorage.setItem('token', data.tokens.access.token);
 
-      navigate('/todo', { state: { token: data.token } });
+      // Redirect based on user role if available
+      if (data.user && data.user.role) {
+        if (data.user.role === 'admin') {
+          navigate('/admin-dashboard', { state: { token: data.token } });
+        } else if (data.user.role === 'user') {
+          navigate('/user-dashboard', { state: { token: data.token } });
+        } else {
+          // Handle other roles as needed
+          navigate('/dashboard', { state: { token: data.token } });
+        }
+      } else {
+        // Default redirect or handle no role case
+        navigate('/login'); // Redirect to login form
+      }
     } catch (error) {
       console.error('An error occurred:', error);
     }
