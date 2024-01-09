@@ -155,7 +155,7 @@ const Header = () => {
                     <div className="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
                             <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.svg" alt="logo" />
-                            <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">SATU DIGITAL</span>
+                            <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">SATUDIGITAL</span>
                         </Link>
                         <button
                             type="button"
@@ -472,7 +472,20 @@ const Header = () => {
                                 <IconCaretDown />
                             </div>
                         </button>
-                        
+                        <ul className="sub-menu">
+                            <li>
+                                <Link href="/">{t('sales')}</Link>
+                            </li>
+                            <li>
+                                <Link href="/analytics">{t('analytics')}</Link>
+                            </li>
+                            <li>
+                                <Link href="/finance">{t('finance')}</Link>
+                            </li>
+                            <li>
+                                <Link href="/crypto">{t('crypto')}</Link>
+                            </li>
+                        </ul>
                     </li>
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
