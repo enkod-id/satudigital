@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../store';
+import { IRootState } from '../../store';
+import { setPageTitle, toggleLocale, toggleRTL } from '../../store/themeConfigSlice';
 import { useEffect, useState } from 'react';
-import { setPageTitle, toggleLocale, toggleRTL } from '../store/themeConfigSlice';
 import { useRouter } from 'next/router';
 import BlankLayout from '@/components/Layouts/BlankLayout';
 import Dropdown from '@/components/Dropdown';
 import { useTranslation } from 'react-i18next';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
+import IconUser from '@/components/Icon/IconUser';
 import IconMail from '@/components/Icon/IconMail';
 import IconLockDots from '@/components/Icon/IconLockDots';
 import IconInstagram from '@/components/Icon/IconInstagram';
@@ -15,17 +16,45 @@ import IconFacebookCircle from '@/components/Icon/IconFacebookCircle';
 import IconTwitter from '@/components/Icon/IconTwitter';
 import IconGoogle from '@/components/Icon/IconGoogle';
 
-const LoginBoxed = () => {
+const RegisterBoxed = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Login Boxed'));
+        dispatch(setPageTitle('Register Boxed'));
     });
     const router = useRouter();
 
-    // const submitForm = (e: any) => {
-    //     e.preventDefault();
-    //     router.push('/');
-    // };
+    const submitForm = (e) => {
+        e.preventDefault();
+        const name = e.target.Name.value;
+        const email = e.target.Email.value;
+        const password = e.target.Password.value;
+    
+        // Call the registerUser function with user input values
+        registerUser(name, email, password);
+      };
+
+      const registerUser = async (name, email, password) => {
+        try {
+          const response = await fetch('http://localhost:5000/v1/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, password }),
+          });
+    
+          if (response.status === 201) {
+            // Registration successful, you can redirect the user to the login page
+            router.push('/'); // Replace '/' with the URL of your login page
+          } else {
+            // Handle registration error
+            // You can display an error message or handle it as needed
+          }
+        } catch (error) {
+          // Handle registration error
+          // You can display an error message or handle it as needed
+        }
+      };
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -42,48 +71,6 @@ const LoginBoxed = () => {
     useEffect(() => {
         setLocale(localStorage.getItem('i18nextLng') || themeConfig.locale);
     }, []);
-
-    const [email, setEmail] = useState(''); // Declare email state
-    const [password, setPassword] = useState(''); 
-
-    const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    
-        try {
-            const emailInput = document.getElementById('Email') as HTMLInputElement;
-            const passwordInput = document.getElementById('Password') as HTMLInputElement;
-    
-            const email = emailInput.value;
-            const password = passwordInput.value;
-    
-            console.log('Attempting login with email:', email);
-    
-            const response = await fetch('http://localhost:5000/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            });
-    
-            if (response.ok) {
-                console.log('Login successful');
-                // Pindah halaman hanya jika login berhasil
-                router.push('/dashboard');
-            } else {
-                const data = await response.json();
-                console.error('Login failed:', data.message || 'Unknown error');
-            }
-        } catch (error) {
-            console.error('Error during login:', error.message);
-        }
-    };
-    
-    
-    
 
     const { t, i18n } = useTranslation();
 
@@ -145,10 +132,19 @@ const LoginBoxed = () => {
                         </div>
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="mb-10">
-                                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in</h1>
-                                <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to login</p>
+                                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
+                                <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
                             </div>
                             <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
+                                <div>
+                                    <label htmlFor="Name">Name</label>
+                                    <div className="relative text-white-dark">
+                                        <input id="Name" type="text" placeholder="Enter Name" className="form-input ps-10 placeholder:text-white-dark" />
+                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                            <IconUser fill={true} />
+                                        </span>
+                                    </div>
+                                </div>
                                 <div>
                                     <label htmlFor="Email">Email</label>
                                     <div className="relative text-white-dark">
@@ -174,7 +170,7 @@ const LoginBoxed = () => {
                                     </label>
                                 </div>
                                 <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                    Sign in
+                                    Sign Up
                                 </button>
                             </form>
                             <div className="relative my-7 text-center md:mb-9">
@@ -222,9 +218,9 @@ const LoginBoxed = () => {
                                 </ul>
                             </div>
                             <div className="text-center dark:text-white">
-                                Don't have an account ?&nbsp;
-                                <Link href="/auth/register" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                    SIGN UP
+                                Already have an account ?&nbsp;
+                                <Link href="/auth/boxed-signin" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                    SIGN IN
                                 </Link>
                             </div>
                         </div>
@@ -234,7 +230,7 @@ const LoginBoxed = () => {
         </div>
     );
 };
-LoginBoxed.getLayout = (page: any) => {
+RegisterBoxed.getLayout = (page: any) => {
     return <BlankLayout>{page}</BlankLayout>;
 };
-export default LoginBoxed;
+export default RegisterBoxed;
