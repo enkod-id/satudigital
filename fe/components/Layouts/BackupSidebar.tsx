@@ -112,7 +112,35 @@ const Sidebar = () => {
                                     </div>
                                 </Link>
                             </li>
-                            
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'dashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('dashboard')}>
+                                    <div className="flex items-center">
+                                        <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('dashboard')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'dashboard' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'dashboard' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/">{t('sales')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/analytics">{t('analytics')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/finance">{t('finance')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/crypto">{t('crypto')}</Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
 
                             <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                 <IconMinus className="hidden h-5 w-4 flex-none" />
@@ -121,7 +149,14 @@ const Sidebar = () => {
 
                             <li className="nav-item">
                                 <ul>
-                                    
+                                    <li className="nav-item">
+                                        <Link href="/apps/chat" className="group">
+                                            <div className="flex items-center">
+                                                <IconMenuChat className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('chat')}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
                                     <li className="nav-item">
                                         <Link href="/apps/mailbox" className="group">
                                             <div className="flex items-center">
@@ -193,7 +228,14 @@ const Sidebar = () => {
                                         </AnimateHeight>
                                     </li>
 
-                                    
+                                    <li className="nav-item">
+                                        <Link href="/apps/calendar" className="group">
+                                            <div className="flex items-center">
+                                                <IconMenuCalendar className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('calendar')}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
                                 </ul>
                             </li>
 
@@ -500,7 +542,7 @@ const Sidebar = () => {
 
                             <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                 <IconMinus className="hidden h-5 w-4 flex-none" />
-                                <span>{t('user')}</span>
+                                <span>{t('user_and_pages')}</span>
                             </h2>
 
                             <li className="menu nav-item">
@@ -526,16 +568,147 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
-                            <li className="nav-item">
-                                        <Link href="/apps/calendar" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuCalendar className="shrink-0 group-hover:!text-primary" />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('calendar')}</span>
-                                            </div>
-                                        </Link>
+
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'page' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('page')}>
+                                    <div className="flex items-center">
+                                        <IconMenuPages className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('pages')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'page' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'page' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/pages/knowledge-base">{t('knowledge_base')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pages/contact-us-boxed" target="_blank">
+                                                {t('contact_us_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pages/contact-us-cover" target="_blank">
+                                                {t('contact_us_cover')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pages/faq">{t('faq')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pages/coming-soon-boxed" target="_blank">
+                                                {t('coming_soon_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pages/coming-soon-cover" target="_blank">
+                                                {t('coming_soon_cover')}
+                                            </Link>
+                                        </li>
+                                        <li className="menu nav-item">
+                                            <button
+                                                type="button"
+                                                className={`${
+                                                    errorSubMenu ? 'open' : ''
+                                                } w-full before:h-[5px] before:w-[5px] before:rounded before:bg-gray-300 hover:bg-gray-100 ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] dark:hover:bg-gray-900`}
+                                                onClick={() => setErrorSubMenu(!errorSubMenu)}
+                                            >
+                                                {t('error')}
+                                                <div className={`${errorSubMenu ? '-rotate-90 rtl:rotate-90' : ''} ltr:ml-auto rtl:mr-auto`}>
+                                                    <IconCaretsDown fill={true} className="h-4 w-4" />
+                                                </div>
+                                            </button>
+                                            <AnimateHeight duration={300} height={errorSubMenu ? 'auto' : 0}>
+                                                <ul className="sub-menu text-gray-500">
+                                                    <li>
+                                                        <a href="/pages/error404" target="_blank">
+                                                            {t('404')}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pages/error500" target="_blank">
+                                                            {t('500')}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pages/error503" target="_blank">
+                                                            {t('503')}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </AnimateHeight>
+                                        </li>
+
+                                        <li>
+                                            <Link href="/pages/maintenence" target="_blank">
+                                                {t('maintenence')}
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
                             </li>
-                            
-                            
+
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'auth' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('auth')}>
+                                    <div className="flex items-center">
+                                        <IconMenuAuthentication className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('authentication')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'auth' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'auth' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/auth/boxed-signin" target="_blank">
+                                                {t('login_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/boxed-signup" target="_blank">
+                                                {t('register_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/boxed-lockscreen" target="_blank">
+                                                {t('unlock_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/boxed-password-reset" target="_blank">
+                                                {t('recover_id_boxed')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/cover-login" target="_blank">
+                                                {t('login_cover')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/cover-register" target="_blank">
+                                                {t('register_cover')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/cover-lockscreen" target="_blank">
+                                                {t('unlock_cover')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/auth/cover-password-reset" target="_blank">
+                                                {t('recover_id_cover')}
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
 
                             <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                 <IconMinus className="hidden h-5 w-4 flex-none" />
@@ -546,18 +719,10 @@ const Sidebar = () => {
                                 <Link href="https://vristo.sbthemes.com" target="_blank" className="nav-link group">
                                     <div className="flex items-center">
                                         <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('faq')}</span>
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('documentation')}</span>
                                     </div>
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                        <Link href="/apps/chat" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuChat className="shrink-0 group-hover:!text-primary" />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('chat')}</span>
-                                            </div>
-                                        </Link>
-                                    </li>
                         </ul>
                     </PerfectScrollbar>
                 </div>
