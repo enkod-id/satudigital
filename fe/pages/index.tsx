@@ -22,10 +22,10 @@ const LoginBoxed = () => {
     });
     const router = useRouter();
 
-    const submitForm = (e: any) => {
-        e.preventDefault();
-        router.push('/');
-    };
+    // const submitForm = (e: any) => {
+    //     e.preventDefault();
+    //     router.push('/');
+    // };
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -42,6 +42,48 @@ const LoginBoxed = () => {
     useEffect(() => {
         setLocale(localStorage.getItem('i18nextLng') || themeConfig.locale);
     }, []);
+
+    const [email, setEmail] = useState(''); // Declare email state
+    const [password, setPassword] = useState(''); 
+
+    const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    
+        try {
+            const emailInput = document.getElementById('Email') as HTMLInputElement;
+            const passwordInput = document.getElementById('Password') as HTMLInputElement;
+    
+            const email = emailInput.value;
+            const password = passwordInput.value;
+    
+            console.log('Attempting login with email:', email);
+    
+            const response = await fetch('http://localhost:5000/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Login successful');
+                // Pindah halaman hanya jika login berhasil
+                router.push('/dashboard');
+            } else {
+                const data = await response.json();
+                console.error('Login failed:', data.message || 'Unknown error');
+            }
+        } catch (error) {
+            console.error('Error during login:', error.message);
+        }
+    };
+    
+    
+    
 
     const { t, i18n } = useTranslation();
 
