@@ -4,3 +4,4 @@ module.exports.Todo = require('./todo.model');
 module.exports.Product = require('./product.model');
 module.exports.Transaction = require('./transaction.model');
 module.exports.History = require('./history.model');
+module.exports.Profile = require('./profile.model');

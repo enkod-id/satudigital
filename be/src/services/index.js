@@ -6,3 +6,4 @@ module.exports.todoService = require('./todo.service');
 module.exports.productService = require('./product.service');
 module.exports.transactionService = require('./transaction.service');
 module.exports.historyService = require('./history.service');
+module.exports.profileService = require('./profile.service');

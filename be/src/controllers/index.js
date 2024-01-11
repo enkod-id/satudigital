@@ -4,3 +4,4 @@ module.exports.todoController = require('./todo.controller');
 module.exports.productController = require('./product.controller');
 module.exports.transactionController = require('./transaction.controller');
 module.exports.historyController = require('./history.controller');
+module.exports.profileController = require('./profile.controller');

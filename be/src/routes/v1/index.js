@@ -5,6 +5,7 @@ const todoRoute = require('./todo.route');
 const productRoute = require('./product.route');
 const transactionRoute = require('./transaction.route');
 const historyRoute = require('./history.route');
+const profileRoute = require('./profile.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -34,6 +35,10 @@ const defaultRoutes = [
   {
     path: '/history',
     route: historyRoute,
+  },
+  {
+    path: '/profiles',
+    route: profileRoute,
   },
 ];
 
