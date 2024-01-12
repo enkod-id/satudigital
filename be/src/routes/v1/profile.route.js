@@ -44,15 +44,11 @@ module.exports = router;
  *             type: object
  *             required:
  *               - idUser
- *               - idStore
  *               - name
  *             properties:
  *               idUser:
  *                 type: string
  *                 description: Unique user ID
- *               idStore:
- *                 type: string
- *                 description: Unique store ID
  *               name:
  *                 type: string
  *                 description: Profile name, no spaces or special characters
@@ -61,7 +57,6 @@ module.exports = router;
  *                 description: Description of the profile
  *             example:
  *               idUser: "12345"
- *               idStore: "67890"
  *               name: "profileName"
  *               description: "Profile description here"
  *     responses:

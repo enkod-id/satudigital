@@ -5,7 +5,12 @@ const catchAsync = require('../utils/catchAsync');
 const { profileService } = require('../services');
 
 const createProfile = catchAsync(async (req, res) => {
-  const { idStore, idUser, name, description } = req.body;
+  let { idStore, idUser, name, description } = req.body;
+
+  // Jika idStore tidak disediakan, buat satu baru secara otomatis
+  if (!idStore) {
+    idStore = new mongoose.Types.ObjectId().toString();
+  }
 
   // Validasi untuk nama - tidak boleh ada spasi atau karakter spesial
   if (!/^[A-Za-z0-9]+$/.test(name)) {

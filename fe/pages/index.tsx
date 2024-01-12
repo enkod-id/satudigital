@@ -49,15 +49,26 @@ const LoginBoxed = () => {
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     
+        // Ini untuk mendapatkan nilai dari state jika Anda menggunakan useState
+        // const email = emailState;
+        // const password = passwordState;
+    
+        // Ini untuk mendapatkan nilai langsung dari input field
+        const emailInput = document.getElementById('Email') as HTMLInputElement;
+        const passwordInput = document.getElementById('Password') as HTMLInputElement;
+        
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        
+        if (!email || !password) {
+            console.error('Email and password are required');
+            alert('Email and password are required');
+            return;
+        }
+    
+        console.log('Attempting login with email:', email);
+        
         try {
-            const emailInput = document.getElementById('Email') as HTMLInputElement;
-            const passwordInput = document.getElementById('Password') as HTMLInputElement;
-    
-            const email = emailInput.value;
-            const password = passwordInput.value;
-    
-            console.log('Attempting login with email:', email);
-    
             const response = await fetch('http://localhost:5000/v1/auth/login', {
                 method: 'POST',
                 headers: {
@@ -69,19 +80,21 @@ const LoginBoxed = () => {
                 }),
             });
     
+            const data = await response.json();
             if (response.ok) {
-                console.log('Login successful');
-                // Pindah halaman hanya jika login berhasil
+                localStorage.setItem('token', data.tokens.access.token); // Menyimpan token di localStorage
+                console.log('Login successful, token:', data.tokens.access.token); // Menampilkan token di console
+                alert('Login successful!'); // Tampilkan pesan sukses ke pengguna
                 router.push('/dashboard');
             } else {
-                const data = await response.json();
                 console.error('Login failed:', data.message || 'Unknown error');
+                alert('Login failed: ' + (data.message || 'Unknown error')); // Tampilkan pesan kegagalan ke pengguna
             }
         } catch (error) {
-            console.error('Error during login:', error.message);
+            console.error('Error during login:', error);
+            alert('Login error: ' + error.message); // Tampilkan pesan error ke pengguna
         }
     };
-    
     
     
 

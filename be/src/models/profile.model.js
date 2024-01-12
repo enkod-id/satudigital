@@ -10,7 +10,7 @@ const profileSchema = mongoose.Schema(
     },
     idStore: {
       type: String,
-      required: true,
+      default: () => new mongoose.Types.ObjectId().toString(), // Menghasilkan ID baru jika tidak disediakan
       trim: true,
     },
     name: {
@@ -25,7 +25,6 @@ const profileSchema = mongoose.Schema(
     },
     description: {
       type: String,
-      required: false,
       trim: true,
     },
   },
@@ -38,9 +37,6 @@ const profileSchema = mongoose.Schema(
 profileSchema.plugin(toJSON);
 profileSchema.plugin(paginate);
 
-/**
- * @typedef Profile
- */
 const Profile = mongoose.model('Profile', profileSchema);
 
 module.exports = Profile;

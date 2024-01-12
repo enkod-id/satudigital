@@ -8,7 +8,7 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Profile>}
  */
 const createProfile = async (profileBody) => {
-  // Anda dapat menambahkan logika validasi tambahan di sini jika diperlukan
+  // Jika idStore tidak ada dalam profileBody, Mongoose akan mengatur nilai default
   return Profile.create(profileBody);
 };
 

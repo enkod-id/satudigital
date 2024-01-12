@@ -4,7 +4,6 @@ const { objectId } = require('./custom.validation');
 const createProfile = {
   body: Joi.object().keys({
     idUser: Joi.string().required().custom(objectId),
-    idStore: Joi.string().required().custom(objectId),
     name: Joi.string().required().regex(/^[A-Za-z0-9]+$/),
     description: Joi.string(),
   }),
@@ -34,7 +33,7 @@ const updateProfile = {
   body: Joi.object()
     .keys({
       idUser: Joi.string().custom(objectId),
-      idStore: Joi.string().custom(objectId),
+      // idStore tidak perlu divalidasi saat update karena sudah otomatis diatur
       name: Joi.string().regex(/^[A-Za-z0-9]+$/),
       description: Joi.string(),
     })
