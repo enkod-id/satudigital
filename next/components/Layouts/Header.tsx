@@ -35,6 +35,15 @@ import IconMenuMore from '@/components/Icon/Menu/IconMenuMore';
 
 const Header = () => {
     const router = useRouter();
+    const logout = () => {
+        // Hapus token dari penyimpanan
+        localStorage.removeItem('token');
+        // atau jika Anda menggunakan cookies, hapus cookie tersebut
+        // Cookies.remove('token');
+
+        // Arahkan pengguna ke halaman login atau halaman utama
+        router.push('/');
+    };
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -449,11 +458,11 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link href="/auth/boxed-signin" className="!py-3 text-danger">
-                                            <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
-                                            Sign Out
-                                        </Link>
-                                    </li>
+                                    <a href="#" onClick={logout} className="!py-3 text-danger">
+                                        <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
+                                        Sign Out
+                                    </a>
+                                </li>
                                 </ul>
                             </Dropdown>
                         </div>
