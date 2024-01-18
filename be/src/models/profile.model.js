@@ -10,7 +10,7 @@ const profileSchema = mongoose.Schema(
     },
     idStore: {
       type: String,
-      default: () => new mongoose.Types.ObjectId().toString(), // Menghasilkan ID baru jika tidak disediakan
+      default: () => new mongoose.Types.ObjectId().toString(),
       trim: true,
     },
     name: {
@@ -27,13 +27,45 @@ const profileSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    fullname: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    location: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+    },
+    profession: {
+      type: String,
+      trim: true,
+    },
+    address: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    website: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Add plugin that converts mongoose to json
+// Menambahkan plugin yang mengonversi mongoose ke JSON
 profileSchema.plugin(toJSON);
 profileSchema.plugin(paginate);
 

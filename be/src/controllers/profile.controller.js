@@ -3,21 +3,43 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { profileService } = require('../services');
+const mongoose = require('mongoose'); // Pastikan mongoose diimpor jika menggunakan ObjectId
+
+const validateStringFields = (fields) => {
+  fields.forEach((field) => {
+    if (field && typeof field !== 'string') {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Fields must be strings');
+    }
+  });
+};
 
 const createProfile = catchAsync(async (req, res) => {
-  let { idStore, idUser, name, description } = req.body;
+  let { idStore, idUser, name, description, fullname, country, location, email, profession, address, phone, website } = req.body;
 
-  // Jika idStore tidak disediakan, buat satu baru secara otomatis
+  validateStringFields([idStore, idUser, name, description, fullname, country, location, email, profession, address, phone, website]);
+
   if (!idStore) {
     idStore = new mongoose.Types.ObjectId().toString();
   }
 
-  // Validasi untuk nama - tidak boleh ada spasi atau karakter spesial
   if (!/^[A-Za-z0-9]+$/.test(name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Name must not contain spaces or special characters');
   }
 
-  const profile = await profileService.createProfile({ idStore, idUser, name, description });
+  const profile = await profileService.createProfile({
+    idStore,
+    idUser,
+    name,
+    description,
+    fullname,
+    country,
+    location,
+    email,
+    profession,
+    address,
+    phone,
+    website,
+  });
   res.status(httpStatus.CREATED).send(profile);
 });
 
@@ -37,14 +59,28 @@ const getProfile = catchAsync(async (req, res) => {
 });
 
 const updateProfile = catchAsync(async (req, res) => {
-  const { name } = req.body;
+  const { idStore, idUser, name, description, fullname, country, location, email, profession, address, phone, website } = req.body;
 
-  // Validasi untuk nama (jika diperbarui)
+  validateStringFields([idStore, idUser, name, description, fullname, country, location, email, profession, address, phone, website]);
+
   if (name && !/^[A-Za-z0-9]+$/.test(name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Name must not contain spaces or special characters');
   }
 
-  const profile = await profileService.updateProfileById(req.params.profileId, req.body);
+  const profile = await profileService.updateProfileById(req.params.profileId, {
+    idStore,
+    idUser,
+    name,
+    description,
+    fullname,
+    country,
+    location,
+    email,
+    profession,
+    address,
+    phone,
+    website,
+  });
   res.send(profile);
 });
 

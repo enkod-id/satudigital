@@ -33,9 +33,11 @@ const AccountSetting = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const userId = "user-id-di-sini"; // Ganti dengan cara mengambil userId sesungguhnya
+    
         const dataToSend = {
             ...formData,
-            idUser, // Asumsi idUser diambil dari sesi pengguna
+            idUser: userId, // Menambahkan idUser ke data yang akan dikirim
         };
     
         const token = localStorage.getItem('token');
@@ -67,6 +69,7 @@ const AccountSetting = () => {
             console.error('Error during form submission:', error);
         }
     };
+    
     
 
     return (

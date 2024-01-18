@@ -24,15 +24,15 @@ module.exports = router;
  * @swagger
  * tags:
  *   name: Profiles
- *   description: Profile management and retrieval
+ *   description: User profiles management and retrieval
  */
 
 /**
  * @swagger
  * /profiles:
  *   post:
- *     summary: Create a profile
- *     description: Only admins can create profiles.
+ *     summary: Create a user profile
+ *     description: Create a user profile with additional fields.
  *     tags: [Profiles]
  *     security:
  *       - bearerAuth: []
@@ -44,130 +44,130 @@ module.exports = router;
  *             type: object
  *             required:
  *               - idUser
+ *               - idStore
  *               - name
+ *               - fullname
+ *               - country
+ *               - location
+ *               - email
+ *               - profession
+ *               - address
+ *               - phone
+ *               - website
  *             properties:
  *               idUser:
  *                 type: string
- *                 description: Unique user ID
- *               name:
+ *               idStore:
  *                 type: string
- *                 description: Profile name, no spaces or special characters
- *               description:
+ *              name:
  *                 type: string
- *                 description: Description of the profile
+ *               fullname:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               profession:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               website:
+ *                 type: string
  *             example:
  *               idUser: "12345"
- *               name: "profileName"
- *               description: "Profile description here"
+ *               idStore: "67890"
+ *               name: "jakartastore"
+ *               fullname: "John Doe"
+ *               country: "United States"
+ *               location: "New York"
+ *               email: "john@example.com"
+ *               profession: "Web Developer"
+ *               address: "123 Main St"
+ *               phone: "+1 (123) 456-7890"
+ *               website: "https://www.example.com"
  *     responses:
  *       "201":
- *         description: Profile created
- *       "400":
- *         description: Bad request
- *       "401":
- *         description: Unauthorized
- *       "403":
- *         description: Forbidden
- *
- *   get:
- *     summary: Get all profiles
- *     description: Only admins can retrieve all profiles.
- *     tags: [Profiles]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: idUser
- *         schema:
- *           type: string
- *         description: User ID to filter by
- *       - in: query
- *         name: idStore
- *         schema:
- *           type: string
- *         description: Store ID to filter by
- *       - in: query
- *         name: name
- *         schema:
- *           type: string
- *         description: Profile name to filter by
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Maximum number of profiles per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: Page number
- *     responses:
- *       "200":
- *         description: List of profiles
+ *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Profile'
- *                 page:
- *                   type: integer
- *                 limit:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
- *                 totalResults:
- *                   type: integer
+ *                $ref: '#/components/schemas/UserProfile'
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  *
- * /profiles/{profileId}:
  *   get:
- *     summary: Get a specific profile
- *     description: Logged in users can fetch their own profile information. Only admins can fetch others.
+ *     summary: Get user profiles
+ *     description: Get user profiles with additional fields.
+ *     tags: [Profiles]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserProfile'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ */
+
+/**
+ * @swagger
+ * /profiles/{id}:
+ *   get:
+ *     summary: Get a user profile by ID
+ *     description: Get a user profile by its ID with additional fields.
  *     tags: [Profiles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: profileId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Unique Profile ID
+ *         description: User profile ID
  *     responses:
  *       "200":
- *         description: Profile data
+ *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Profile'
+ *                $ref: '#/components/schemas/UserProfile'
  *       "401":
- *         description: Unauthorized
+ *         $ref: '#/components/responses/Unauthorized'
  *       "403":
- *         description: Forbidden
+ *         $ref: '#/components/responses/Forbidden'
  *       "404":
- *         description: Profile not found
+ *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a profile
- *     description: Logged in users can only update their own profile. Only admins can update others.
+ *     summary: Update a user profile by ID
+ *     description: Update a user profile by its ID with additional fields.
  *     tags: [Profiles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: profileId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Unique Profile ID
+ *         description: User profile ID
  *     requestBody:
  *       required: true
  *       content:
@@ -179,42 +179,70 @@ module.exports = router;
  *                 type: string
  *               idStore:
  *                 type: string
- *               name:
+ *               fullname:
  *                 type: string
- *               description:
+ *               country:
  *                 type: string
+ *               location:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               profession:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               website:
+ *                 type: string
+ *             example:
+ *               idUser: "12345"
+ *               idStore: "67890"
+ *               fullname: "John Doe"
+ *               country: "United States"
+ *               location: "New York"
+ *               email: "john@example.com"
+ *               profession: "Web Developer"
+ *               address: "123 Main St"
+ *               phone: "+1 (123) 456-7890"
+ *               website: "https://www.example.com"
  *     responses:
  *       "200":
- *         description: Profile updated
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/UserProfile'
  *       "400":
- *         description: Bad request
+ *         $ref: '#/components/responses/BadRequest'
  *       "401":
- *         description: Unauthorized
+ *         $ref: '#/components/responses/Unauthorized'
  *       "403":
- *         description: Forbidden
+ *         $ref: '#/components/responses/Forbidden'
  *       "404":
- *         description: Profile not found
+ *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a profile
- *     description: Logged in users can delete only their own profile. Only admins can delete others.
+ *     summary: Delete a user profile by ID
+ *     description: Delete a user profile by its ID with additional fields.
  *     tags: [Profiles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: profileId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Unique Profile ID
+ *         description: User profile ID
  *     responses:
  *       "200":
- *         description: Profile deleted
+ *         description: No content
  *       "401":
- *         description: Unauthorized
+ *         $ref: '#/components/responses/Unauthorized'
  *       "403":
- *         description: Forbidden
+ *         $ref: '#/components/responses/Forbidden'
  *       "404":
- *         description: Profile not found
+ *         $ref: '#/components/responses/NotFound'
  */
