@@ -1,4 +1,5 @@
-import withAuth from '../utils/auth';
+import React from 'react';
+import withAuth from '../utils/withAuth';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../store';
@@ -25,7 +26,7 @@ import IconPlus from '@/components/Icon/IconPlus';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
 import IconMultipleForwardRight from '@/components/Icon/IconMultipleForwardRight';
 
-const Index = () => {
+const DashboardAdmin  = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Sales Admin'));
@@ -1121,4 +1122,4 @@ const Index = () => {
     );
 };
 
-export default withAuth(Index);
+export default withAuth(DashboardAdmin);
