@@ -17,13 +17,16 @@ interface AuthDetails {
 
 const getAuthDetails = (): AuthDetails => {
   if (typeof window === "undefined") {
+    // Redirecting or setting state here won't work because this code is run on the server,
+    // where window is not available. Instead, we return early.
     return { isAuthenticated: false, role: null };
   }
 
   const token = localStorage.getItem('authToken');
   if (!token) {
     return { isAuthenticated: false, role: null };
-  }try {
+  }
+  try {
     const payloadBase64 = token.split('.')[1];
     const decodedJson = atob(payloadBase64);
     const decoded = JSON.parse(decodedJson);
@@ -33,7 +36,7 @@ const getAuthDetails = (): AuthDetails => {
     const role = decoded.role; // Asumsi: Role disimpan dalam token
 
     if (isExpired) {
-      // Jika token kadaluarsa, user tidak terotentikasi dan role dianggap null
+      localStorage.removeItem('authToken'); // Clear expired token
       return { isAuthenticated: false, role: null };
     }
 
@@ -44,9 +47,7 @@ const getAuthDetails = (): AuthDetails => {
   }
 };
 
-// Definisikan tipe untuk komponen yang dibungkus
 function withAuth<P extends WithAuthProps>(WrappedComponent: ComponentType<P>): ComponentType<P> {
-  
   const WithAuthComponent: ComponentType<P> = (props) => {
     const router = useRouter();
     const [authDetails, setAuthDetails] = useState<AuthDetails>({ isAuthenticated: false, role: null });
@@ -55,48 +56,45 @@ function withAuth<P extends WithAuthProps>(WrappedComponent: ComponentType<P>): 
       const auth = getAuthDetails();
       setAuthDetails(auth);
 
-      // Redirect berdasarkan role
       if (!auth.isAuthenticated) {
-        router.push('/login'); // Asumsi '/login' adalah rute untuk halaman login Anda
+        router.push('/login');
       } else {
         switch (auth.role) {
           case 'user':
             if (router.pathname.includes('/dashboard/admin') || router.pathname.includes('/dashboard/superadmin')) {
-              router.push('/dashboard_user'); // Sesuaikan dengan rute halaman dashboard pengguna Anda
+              router.push('/dashboard/user'); // Adjust the route to your user dashboard page
             }
             break;
           case 'admin':
             if (router.pathname.includes('/dashboard/superadmin')) {
-              router.push('/dashboard_admin'); // Sesuaikan dengan rute halaman dashboard admin Anda
+              router.push('/dashboard/admin'); // Adjust the route to your admin dashboard page
             }
             break;
-          case 'superadmin':
-            // Superadmin bisa mengakses semua halaman, tidak ada aksi
-            break;
+          // No need to handle the 'superadmin' case if they can access all pages
           default:
-            // Role tidak dikenali, lakukan logout dan redirect
-            router.push('/logout'); // Pastikan Anda memiliki route logout
+            router.push('/logout'); // Redirect to logout if the role is unrecognized
             break;
         }
-      }      
-    }, [router]); // Hanya perlu 'router' di dependencies array
+      }
+    }, [router]);
 
-    if (authDetails.isAuthenticated === false) {
-      return null; // atau <LoadingComponent />;
+    // Show a loading component until authentication is confirmed
+    if (authDetails.isAuthenticated === null) {
+      return <div>Loading...</div>; // Replace this with your actual loading component
     }
 
-    if (authDetails.isAuthenticated && authDetails.role) {
+    // If authenticated, render the wrapped component
+    if (authDetails.isAuthenticated) {
       return <WrappedComponent {...props} />;
     }
 
-    // Jika tidak terotentikasi, tidak perlu tampilkan apa-apa
-    // Karena redirect akan menangani situasi ini
+    // If not authenticated, render nothing as we're redirecting to '/login'
     return null;
+  };
 
   WithAuthComponent.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
   return WithAuthComponent;
-  }
-};
+}
 
 export default withAuth;

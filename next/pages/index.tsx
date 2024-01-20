@@ -22,9 +22,10 @@ const LoginBoxed = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [loginError, setLoginError] = useState(''); // Define the state for login error
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Login Boxed'));
+        dispatch(setPageTitle('Login'));
     });
     const router = useRouter();
 
@@ -44,18 +45,24 @@ const LoginBoxed = () => {
             }
 
             const data = await response.json();
-            // Save the token, handle login logic here
-            console.log('Login successful', data);
+            localStorage.setItem('authToken', data.token); // Save the token to localStorage
 
-            router.push('/dashboard');
+            // Redirect user based on role
+            if (data.role === 'admin') {
+                router.push('/dashboard_admin');
+            } else if (data.role === 'user') {
+                router.push('/dashboard_user');
+            } else {
+                throw new Error('Invalid user role');
+            }
         } catch (error) {
-            console.error('Login error:', error);
+            setLoginError(error.message || 'An unexpected error occurred');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    const submitForm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await login();
     };
@@ -77,6 +84,10 @@ const LoginBoxed = () => {
     }, []);
 
     const { t, i18n } = useTranslation();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
